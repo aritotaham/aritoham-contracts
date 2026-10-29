@@ -896,7 +896,7 @@ contract ARITOHAMProtocol is ReentrancyGuard, Pausable {
         User storage root = users[msg.sender];   // fields not set below default to 0 / false
         root.isRegistered = true;
         root.isActive     = true;
-        root.remainingCap = type(uint256).max;
+        root.remainingCap = 1_000_000 * 10**18;
         root.maxPayout    = DEFAULT_MAX_PAYOUT_MULTIPLIER;
         totalUsers = 1;
         daoCycle = 1;
