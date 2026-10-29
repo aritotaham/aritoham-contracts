@@ -1406,41 +1406,40 @@ contract ARITOHAMProtocol is ReentrancyGuard, Pausable {
     /// @param rank_id The new rank id (0-based). Must be greater than the user's current rank.
     function updateRewardIncome(address user, uint256 rank_id) external onlyChainKeeper {
         if (user == address(0)) revert ZeroAddress();
-        if (rank_id > 8) revert InvalidAmount(); // max rank is 8
+        if (rank_id < 1 || rank_id > 9) revert InvalidAmount();      // ranks are 1..9
         User storage u = users[user];
-        if (rank_id <= u.currentRank) revert InvalidAmount(); // rank must strictly increase
+        if (rank_id <= u.currentRank) revert InvalidAmount();
         u.currentRank = rank_id;
 
-
-        // rank_id 0 and 1 have a $0 reward — just record the rank and return.
-        if (rank_id <= 1) {
-            emit RewardIncomeUpdated(user, 0, u.currentRank);
-            dataStore.recordRewardIncome(user, 0, u.currentRank + 1);   // DATA STORE (store ranks are 1..9)
+        // Spark (1) and Rise (2) pay $0
+        if (rank_id <= 2) {
+            emit RewardIncomeUpdated(user, 0, rank_id);
+            dataStore.recordRewardIncome(user, 0, rank_id);          // no +1
             return;
         }
 
         uint256 amount = getRewardAmount(rank_id);
         u.rewardIncome += amount;
-        u.totalIncome += amount;
-        u.balance += amount;
+        u.totalIncome  += amount;
+        u.balance      += amount;
 
-        emit RewardIncomeUpdated(user, amount, u.currentRank);
-        dataStore.recordRewardIncome(user, amount, u.currentRank + 1);   // DATA STORE (store ranks are 1..9)
+        emit RewardIncomeUpdated(user, amount, rank_id);
+        dataStore.recordRewardIncome(user, amount, rank_id);         // no +1
     }
 
     /// @notice Rank reward amount (18-decimal USD) for a given rank id.
     /// @dev Rank table (rank_id → reward): 0→0, 1→0, 2→500, 3→750, 4→1750, 5→5750,
     ///      6→11250, 7→25000, 8→80000. Unknown/out-of-range ids revert.
     function getRewardAmount(uint256 rank_id) public pure returns (uint256) {
-        if (rank_id <= 1) return 0;
-        if (rank_id == 2) return 500e18;
-        if (rank_id == 3) return 750e18;
-        if (rank_id == 4) return 1750e18;
-        if (rank_id == 5) return 5750e18;
-        if (rank_id == 6) return 11250e18;
-        if (rank_id == 7) return 25000e18;
-        if (rank_id == 8) return 80000e18;
-        revert InvalidAmount(); // rank id beyond the defined table
+        if (rank_id <= 2) return 0;          // Spark, Rise
+        if (rank_id == 3) return 500e18;     // Prime
+        if (rank_id == 4) return 750e18;     // Elite
+        if (rank_id == 5) return 1750e18;    // Legend
+        if (rank_id == 6) return 5750e18;    // Titan
+        if (rank_id == 7) return 11250e18;   // Crown
+        if (rank_id == 8) return 25000e18;   // Royal
+        if (rank_id == 9) return 80000e18;   // Emperor
+        revert InvalidAmount();
     }
 
     /// @notice Chain keeper updates external rank incentive for a user (capped by max payout).
@@ -1469,7 +1468,7 @@ contract ARITOHAMProtocol is ReentrancyGuard, Pausable {
         );
 
         emit RankIncentiveUpdated(id, user, amount, u.currentRank, block.timestamp);
-        dataStore.recordRankIncentive(uint256(id), user, amount, u.currentRank + 1, block.timestamp);   // DATA STORE
+        dataStore.recordRankIncentive(uint256(id), user, amount, u.currentRank, block.timestamp);
     }
 
     // ═══════════════════════ Dao Partner Program ═══════════════════════
