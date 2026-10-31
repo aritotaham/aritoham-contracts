@@ -292,6 +292,17 @@ contract AritohamDataStore {
             delete dayDirectBusiness[user][d - i];
         }
 
+        // ── referrals (downline of this user) ──
+        address[] storage ds = _directs[user];
+        for (uint256 i; i < ds.length; i++) {
+            _users[ds[i]].referrer = address(0);   // detach each direct from this user
+        }
+        delete _directs[user];
+        u.directCount      = 0;
+        u.activeDirects    = 0;
+        u.contributingCount = 0;
+        u.teamCount        = 0;
+
         // ── DAO ──
         if (u.daoLifetime) {
             u.daoLifetime = false;
