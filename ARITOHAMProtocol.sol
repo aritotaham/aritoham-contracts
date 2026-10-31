@@ -744,18 +744,18 @@ contract ARITOHAMProtocol is ReentrancyGuard, Pausable {
     /// @dev Dao Partner Program: 5% of each gross stake accrues into the shared pool.
     uint256 public constant DAO_PCT = 5;
 
-    address public constant WALLET_WITHDRAW_FEE1 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7;
-    address public constant WALLET_WITHDRAW_FEE2 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7;
-    address public constant WALLET_WITHDRAW_FEE3 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7;
-    address public constant WALLET_WITHDRAW_FEE4 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7;
+    address public constant WALLET_WITHDRAW_FEE1 = 0xfFB05C5F6171809C94048293A9065AAF1f5Df79E;
+    address public constant WALLET_WITHDRAW_FEE2 = 0x17B4fC67965aE81352eF4cC4b5626a1725F6afF8;
+    address public constant WALLET_WITHDRAW_FEE3 = 0xaE2ed941f90B85120a88d6De6d0428EeB1bF5712;
+    address public constant WALLET_WITHDRAW_FEE4 = 0x80bD4D72EDe95Ad35ee4e7b0C8DC49051d5b821a;
 
     // ═══════════════════════ Fixed reward wallets (deposit fee split) ═══════════════════════
     // Percentages are expressed in BPS out of 1000, because ecosystemFee is 10% of deposit.
     uint256 private constant _REWARD_BPS_DENOM = 1000;
-    address private constant _REWARD_WALLET_1 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7; // 2.5%
-    address private constant _REWARD_WALLET_2 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7; // 2.5%
-    address private constant _REWARD_WALLET_3 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7; // 2.5%
-    address private constant _REWARD_WALLET_4 = 0xC008B65ABBaED32E055858c8BE391dAA3204b3b7; // 2.5%
+    address private constant _REWARD_WALLET_1 = 0xfFB05C5F6171809C94048293A9065AAF1f5Df79E; // 2.5%
+    address private constant _REWARD_WALLET_2 = 0x17B4fC67965aE81352eF4cC4b5626a1725F6afF8; // 2.5%
+    address private constant _REWARD_WALLET_3 = 0xaE2ed941f90B85120a88d6De6d0428EeB1bF5712; // 2.5%
+    address private constant _REWARD_WALLET_4 = 0x80bD4D72EDe95Ad35ee4e7b0C8DC49051d5b821a; // 2.5%
 
     uint256 private constant _REWARD_WALLET_1_BPS = 250;
     uint256 private constant _REWARD_WALLET_2_BPS = 250;
